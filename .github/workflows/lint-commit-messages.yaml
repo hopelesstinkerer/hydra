@@ -1,0 +1,32 @@
+name: Lint Commit Messages
+on:
+  push:
+    branches: [main, develop]
+permissions:
+  contents: read
+jobs:
+  lint-commit-messages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Lint commit messages
+        run: |
+          before="${{ github.event.before }}"
+          after="${{ github.sha }}"
+
+          if [ "$before" = "0000000000000000000000000000000000000000" ]; then
+            range="$after"
+          else
+            range="$before..$after"
+          fi
+
+          for commit in $(git rev-list "$range"); do
+            hash=$(git log --format="%h" -1 "$commit")
+            msgfile=$(mktemp)
+            git log --format="%s%n%n%b" -1 "$commit" > "$msgfile"
+            echo "checking $hash: $(head -1 "$msgfile")"
+            scripts/lint-commit-messages.sh "$msgfile"
+            rm "$msgfile"
+          done

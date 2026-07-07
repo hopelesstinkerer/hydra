@@ -1,0 +1,21 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# Temp files
+*.bak
+*.tmp
+*.temp
