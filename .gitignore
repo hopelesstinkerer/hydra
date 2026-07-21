@@ -19,3 +19,8 @@ Thumbs.db
 *.bak
 *.tmp
 *.temp
+
+# Rust / Cargo
+/target/
+*.rlib
+*.dSYM/
