@@ -9,3 +9,4 @@ pub mod algebra;
 pub mod core;
 pub mod event;
 pub mod store;
+pub mod task;

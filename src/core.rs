@@ -106,6 +106,27 @@ impl TypeConstructor for Execution {
 }
 
 // ---------------------------------------------------------------------------
+// is_composite_goal
+// ---------------------------------------------------------------------------
+
+/// Returns `true` if `goal` contains multiple instructions (v1 heuristic:
+/// detects `;` or newline as separators).
+///
+/// Simple goals (single instruction) are executed directly. Composite
+/// goals are decomposed into sub-goals during the Planning phase.
+///
+/// # Note
+///
+/// This v1 heuristic is approximate — natural-language goals with
+/// semicolons falsely split, and comma- or period-separated instructions
+/// are missed. It will be replaced by LLM-based decomposition in a
+/// future release.
+#[must_use]
+pub fn is_composite_goal(goal: &str) -> bool {
+    goal.contains(';') || goal.contains('\n')
+}
+
+// ---------------------------------------------------------------------------
 // EventPayload
 // ---------------------------------------------------------------------------
 

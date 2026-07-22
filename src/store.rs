@@ -21,8 +21,7 @@ use crate::task::TaskState;
 ///
 /// * `Snapshot` is deliberately absent from this trait to avoid the
 ///   `dyn Repository` E0191 error (`the value of the associated type
-///   Snapshot must be specified`). Snapshots are restored in a later
-///   issue.
+///   Snapshot must be specified`). Snapshot support is deferred.
 /// * Thread safety is not required. Implementations that need
 ///   interior mutability should wrap themselves in a `Mutex` or
 ///   `RwLock` externally.
