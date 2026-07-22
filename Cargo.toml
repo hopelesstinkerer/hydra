@@ -1,0 +1,19 @@
+[package]
+name = "hydra"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+repository = "https://github.com/hopelesstinkerer/hydra"
+description = "A recursive system that captures experience, externalizes memory, evaluates outcomes, and writes back into itself."
+
+[lib]
+name = "hydra"
+path = "src/lib.rs"
+
+[dev-dependencies]
+static_assertions = "1.1"
+
+[[bin]]
+path = "src/main.rs"
+name = "hydra"

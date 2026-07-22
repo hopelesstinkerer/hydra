@@ -19,3 +19,11 @@ Thumbs.db
 *.bak
 *.tmp
 *.temp
+
+# Tooling
+/.omo/
+
+# Rust / Cargo
+/target/
+*.rlib
+*.dSYM/
