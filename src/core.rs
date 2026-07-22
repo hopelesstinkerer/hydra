@@ -10,6 +10,8 @@ use std::fmt;
 use std::marker::PhantomData;
 
 use crate::algebra::TypeConstructor;
+use crate::event::{Error, SystemEvent};
+use crate::store::Repository;
 
 // ---------------------------------------------------------------------------
 // Wrapper macro
@@ -104,6 +106,17 @@ impl TypeConstructor for Execution {
 }
 
 // ---------------------------------------------------------------------------
+// EventPayload
+// ---------------------------------------------------------------------------
+
+/// The concrete payload type produced by a layer's [`process`](Layer::process)
+/// method.
+///
+/// A type alias so the payload structure can evolve without changing
+/// every signature. Currently [`String`].
+pub type EventPayload = String;
+
+// ---------------------------------------------------------------------------
 // Layer trait
 // ---------------------------------------------------------------------------
 
@@ -111,10 +124,26 @@ impl TypeConstructor for Execution {
 ///
 /// Types implementing `Layer` are type-level markers that identify which
 /// architectural layer a value belongs to. Each layer has an associated
-/// [`Event`](Self::Event) type.
+/// [`Event`](Self::Event) type and a [`process`](Self::process) method
+/// that drives the layer's core logic.
 pub trait Layer: TypeConstructor + Sized {
     /// The event type associated with this layer.
     type Event;
+
+    /// Process an event for this layer.
+    ///
+    /// Takes a layer-specific event and a mutable reference to an event
+    /// store, and returns a result containing:
+    ///
+    /// - An artifact (a wrapper around [`EventPayload`]) whose type is
+    ///   determined by the layer's [`TypeConstructor`] implementation.
+    /// - A vector of [`SystemEvent`]s emitted as side effects (may be
+    ///   empty).
+    fn process(
+        &mut self,
+        event: Self::Event,
+        store: &mut dyn Repository<Event = SystemEvent>,
+    ) -> Result<(Self::Of<EventPayload>, Vec<SystemEvent>), Error>;
 }
 
 // ---------------------------------------------------------------------------
@@ -189,5 +218,49 @@ mod tests {
         let _r: Record<dyn std::fmt::Debug + Send + Sync> = Record(PhantomData);
         let _w: Window<str> = Window(PhantomData);
         let _o: Observation<dyn std::fmt::Debug + Send + Sync> = Observation(PhantomData);
+    }
+
+    // -----------------------------------------------------------------------
+    // TestLayer — minimal layer implementation for testing process()
+    // -----------------------------------------------------------------------
+
+    /// A minimal layer implementation used to exercise [`Layer::process`]
+    /// at runtime.
+    ///
+    /// `TestLayer` implements [`Layer<Event = ContextEvent>`](Layer) and
+    /// always returns `Ok` with an empty side-effect list.
+    struct TestLayer;
+
+    impl TypeConstructor for TestLayer {
+        type Of<T: ?Sized> = Window<T>;
+    }
+
+    impl Layer for TestLayer {
+        type Event = crate::event::ContextEvent;
+
+        fn process(
+            &mut self,
+            _event: crate::event::ContextEvent,
+            _store: &mut dyn Repository<Event = SystemEvent>,
+        ) -> Result<(Self::Of<EventPayload>, Vec<SystemEvent>), Error> {
+            Ok((Window(PhantomData), vec![]))
+        }
+    }
+
+    /// Verify that [`Layer::process`] returns `Ok` with the correct
+    /// artifact type and an empty side-effect list.
+    #[test]
+    fn process_returns_ok() {
+        use crate::event::ContextEvent;
+        use crate::store::VecRepository;
+
+        let mut layer = TestLayer;
+        let mut repo: VecRepository<SystemEvent> = VecRepository::default();
+        let event = ContextEvent;
+
+        let (artifact, side_effects) = layer.process(event, &mut repo).unwrap();
+        // Artifact should be Window<EventPayload> (i.e. Window<String>)
+        let _: Window<EventPayload> = artifact;
+        assert!(side_effects.is_empty());
     }
 }
