@@ -20,6 +20,9 @@ Thumbs.db
 *.tmp
 *.temp
 
+# Tooling
+/.omo/
+
 # Rust / Cargo
 /target/
 *.rlib

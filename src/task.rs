@@ -54,8 +54,8 @@ pub const MAX_DEPTH: u32 = 100;
 /// Every task transitions through these states in order, driven by
 /// the [`execute_task`] state machine.
 ///
-/// This enum is `#[non_exhaustive]`; new states may be added in
-/// future releases without a breaking change.
+/// This enum is `#[non_exhaustive]` to allow adding states without
+/// a breaking change.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum TaskState {
@@ -81,8 +81,8 @@ pub enum TaskState {
 
 /// How a task finished.
 ///
-/// This enum is `#[non_exhaustive]`; new completion modes may be
-/// added in future releases without a breaking change.
+/// This enum is `#[non_exhaustive]` to allow adding completion modes
+/// without a breaking change.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum TaskCompletion {
@@ -98,8 +98,8 @@ pub enum TaskCompletion {
 
 /// The outcome of evaluating a task's output.
 ///
-/// This enum is `#[non_exhaustive]`; new evaluation outcomes may be
-/// added in future releases without a breaking change.
+/// This enum is `#[non_exhaustive]` to allow adding evaluation
+/// outcomes without a breaking change.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum EvaluationResult {
@@ -216,9 +216,8 @@ pub fn write_back_evaluation(
 /// # Blocking
 ///
 /// This function calls [`std::thread::sleep`] between retry attempts,
-/// which blocks the calling thread. This is acceptable for the v1
-/// synchronous architecture. Async support is deferred to a future
-/// release.
+/// which blocks the calling thread. This is acceptable for the current
+/// synchronous architecture.
 pub fn with_retry<T>(
     max_retries: u32,
     delay: Duration,

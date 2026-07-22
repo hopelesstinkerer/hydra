@@ -96,8 +96,7 @@ pub trait Repository {
 ///
 /// The type parameter `T` is currently constrained to [`SystemEvent`]
 /// by the [`Repository`] impl. It remains generic so that the same
-/// store type can be reused when `Repository` is implemented for
-/// other event types in future releases.
+/// store type can be reused for other event types.
 #[derive(Debug, Clone)]
 pub struct VecRepository<T> {
     /// The ordered sequence of stored events.
@@ -190,8 +189,7 @@ fn event_task_id(event: &SystemEvent) -> Option<TaskId> {
 /// The `Compressing` intermediate state is never returned because no
 /// dedicated [`SystemEvent`] variant exists for entering compression.
 /// The `ContextCompressed` event maps directly to `Feedback` (the state
-/// after compression). This gap may be addressed in a future release by
-/// adding a `TaskCompressing` variant.
+/// after compression).
 ///
 /// Returns [`None`] when no lifecycle event for `task_id` exists in the
 /// log.

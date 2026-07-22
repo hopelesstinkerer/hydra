@@ -8,13 +8,9 @@
 //! - Type-level wrapper types ([`Unit`], [`Sum`], [`Product`], [`Compose`])
 //!   and marker types ([`Bottom`], [`Top`]) for compile-time composition.
 //!
-//! # Epic 2 forward compatibility
-//!
 //! [`Semigroup`], [`Monoid`], [`Sum`], [`Product`], [`Compose`], [`Bottom`],
-//! and [`Top`] are defined in Epic 1 but not yet wired into the event system.
-//! They exist for forward compatibility with Epic 2 event composition, where
-//! they will be used to compose and combine [`crate::event::SystemEvent`] values. See
-//! GitHub issues #3 and #4 for the original specification.
+//! and [`Top`] provide type-level machinery for composing and combining
+//! values. See GitHub issues #3 and #4 for the specification.
 
 use std::marker::PhantomData;
 

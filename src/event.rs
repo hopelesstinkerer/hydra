@@ -48,8 +48,8 @@ impl std::fmt::Display for TaskId {
 /// All task-referencing variants use a consistent `id: TaskId` field
 /// for pattern-matching convenience.
 ///
-/// This enum is `#[non_exhaustive]`; new variants may be added in
-/// future releases without a breaking change.
+/// This enum is `#[non_exhaustive]` to allow adding variants without
+/// a breaking change.
 // Manual PartialEq: guard against NaN in Evaluation scores so that
 // two identical events with NaN score compare as equal.
 #[derive(Clone, Debug)]
@@ -218,8 +218,8 @@ impl PartialEq for SystemEvent {
 /// Errors are divided into three severity levels plus a recursive
 /// variant for wrapping child-task failures.
 ///
-/// This enum is `#[non_exhaustive]`; new variants may be added in
-/// future releases without a breaking change.
+/// This enum is `#[non_exhaustive]` to allow adding variants without
+/// a breaking change.
 #[derive(Clone, Debug, PartialEq)]
 #[non_exhaustive]
 pub enum Error {

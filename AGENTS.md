@@ -22,6 +22,18 @@ execution. The user sets a goal; hydra handles the rest.
   introducing a feature includes its implementation, documentation, and tests
   together — never split across commits. A refactor commit does not also fix a
   bug. Self-containment is enforced through review, not automation.
+- **Merge commits**: Merge feature branches into `develop` with `--no-ff`
+  (preserve branch topology). The merge commit message MUST be a conventional
+  commit following the same rules as regular commits (`type(scope): description`,
+  ≤ 50 char subject). The body lists the individual commits from the feature
+  branch as one-liners.
+  GitHub's auto-generated `"Merge pull request #N from ..."` is NOT acceptable
+  — edit it manually in the merge UI.
+   ```
+   feat(core): description
+
+   <run `git log --reverse --oneline develop..HEAD` and paste the output here>
+   ```
 
 ## Work style
 

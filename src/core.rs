@@ -117,10 +117,9 @@ impl TypeConstructor for Execution {
 ///
 /// # Note
 ///
-/// This v1 heuristic is approximate — natural-language goals with
+/// This heuristic is approximate — natural-language goals with
 /// semicolons falsely split, and comma- or period-separated instructions
-/// are missed. It will be replaced by LLM-based decomposition in a
-/// future release.
+/// are missed.
 #[must_use]
 pub fn is_composite_goal(goal: &str) -> bool {
     goal.contains(';') || goal.contains('\n')
